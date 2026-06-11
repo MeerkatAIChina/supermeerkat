@@ -12,6 +12,12 @@
 - 提取 Markdown 正文作为工作流上下文说明
 - 构建步骤列表，校验依赖关系
 
+**dependsOn 校验规则（严格模式）：**
+- 所有 `dependsOn` 引用的 ID 必须存在于步骤列表中，否则拒绝执行并报告具体缺失 ID
+- 无循环依赖（A → B → A），否则拒绝执行并报告循环链路
+- `agent` 字段的值必须是有效的 agent 名称：`research` / `analysis` / `critique` / `orchestrator`，否则拒绝执行并报告非法值
+- 校验失败时向用户报告具体错误信息，不执行任何步骤
+
 ### 2. 管理执行状态
 
 - **创建 run-state.json**：在共享存储目录创建并持续更新此文件
@@ -23,7 +29,7 @@ run-state.json 格式：
 {
   "runId": "run-20260611-143022",
   "workflow": "工作流名称",
-  "startedAt": "ISO8601时间戳",
+  "startedAt": "2026-06-11T14:30:22Z",
   "steps": {
     "step-1": "pending",
     "step-2": "pending"
@@ -33,6 +39,8 @@ run-state.json 格式：
 
 ### 3. 调度 Specialist Agent
 
+`ARTIFACTS` 为调用方传入的共享存储绝对路径（如 `<plugin-root>/shared/artifacts/<run-id>/`）。
+
 对每个待执行步骤：
 1. 更新 run-state.json → `in_progress`
 2. 调用 Agent 工具，传入 agent 名称和以下格式的 prompt：
@@ -41,7 +49,7 @@ run-state.json 格式：
 任务：<task 字段内容>
 输入文件（绝对路径）：<ARTIFACTS>/<input>  （如有）
 输出文件（绝对路径）：<ARTIFACTS>/<output>
-时间建议：请在约 <timeout> 秒内完成
+超时：请在 <timeout> 秒内完成
 
 注意：
 - 必须将结果写入输出文件（绝对路径），不要只输出在对话中
@@ -50,15 +58,16 @@ run-state.json 格式：
 ```
 
 3. 等待 Agent 返回
-4. 使用 Read 验证输出文件已生成且内容非空
+4. 使用 Read 验证输出文件已生成且内容非空；若文件存在但内容明显异常（乱码、完全不相关的内容等），也按失败处理
 5. 更新 run-state.json → `completed`
 
 ### 4. 暂停点处理
 
 若步骤 `pauseAfter: true`：
-- 步骤完成后向用户展示中间结果摘要（Read 输出文件的前 300 字）
+- 步骤完成后先更新 run-state.json 中该步骤状态为 `completed`，再向用户展示中间结果摘要（Read 输出文件的前 300 字）
 - 询问用户：**继续下一步 / 修改后重试 / 中止执行**
 - 等待用户回复后再继续
+- 若用户选择"修改后重试"，将 run-state.json 中该步骤状态回退为 `in_progress`，允许用户修正后重新执行
 
 ### 5. 错误处理
 
