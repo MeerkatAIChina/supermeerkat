@@ -1,6 +1,6 @@
 # 共享存储中的运行时产物（由 run-workflow 动态生成）
 shared/artifacts/run-*/
 
-# 用户创建的 workflow 文件
-# workflows/*.md
-# !workflows/.gitkeep
+# 用户创建的 workflow 文件（个人数据，不纳入版本控制）
+workflows/*.md
+!workflows/.gitkeep
