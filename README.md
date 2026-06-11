@@ -365,16 +365,17 @@ Critique Agent 作为独立审查员，以"挑毛病"为唯一职责：
 
 ```
 supermeerkat/
-├── plugin.json                             # 插件清单（agents + skills 注册）
+├── .claude-plugin/
+│   └── plugin.json                         # 插件清单（元数据，Agent/Skill 自动发现）
 ├── README.md
 ├── LICENSE
 ├── .gitignore
-├── agents/                                 # Agent 系统提示定义
+├── agents/                                 # Agent 系统提示定义（自动发现）
 │   ├── orchestrator.md                     # 编排器 — DAG 解析、状态管理、调度
 │   ├── research.md                         # 研究员 — 信息检索、资料收集
 │   ├── analysis.md                         # 分析师 — 数据分析、策略推导
 │   └── critique.md                         # 审查员 — 四维度独立审查
-├── skills/                                 # 斜杠命令实现
+├── skills/                                 # 斜杠命令实现（自动发现）
 │   ├── create-workflow/
 │   │   ├── SKILL.md                        # 创建工作流命令
 │   │   └── references/
@@ -385,11 +386,9 @@ supermeerkat/
 │       └── SKILL.md                        # 列出工作流命令
 ├── workflows/                              # 用户创建的工作流文件
 │   └── .gitkeep
-├── shared/
-│   └── artifacts/                          # 运行时产物（每次执行一个 run-id 目录）
-│       └── .gitkeep
-└── commands/                               # 预留：独立命令定义
-    └── .gitkeep
+└── shared/
+    └── artifacts/                          # 运行时产物（每次执行一个 run-id 目录）
+        └── .gitkeep
 ```
 
 ---
