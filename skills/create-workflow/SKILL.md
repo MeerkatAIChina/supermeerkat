@@ -1,6 +1,7 @@
 ---
 name: create-workflow
 description: 创建一个新的工作流（workflow）。描述你的业务目标，系统将自动生成包含多个步骤的工作流文件。
+version: 1.0.0
 ---
 
 # create-workflow — 创建工作流

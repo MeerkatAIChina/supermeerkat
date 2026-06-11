@@ -1,0 +1,10 @@
+{
+  "name": "supermeerkat",
+  "version": "1.0.0",
+  "description": "多 Agent 协作工作流引擎，面向消费品行业非技术用户。内置 Orchestrator/Research/Analysis/Critique 四个 Agent，通过 create-workflow / run-workflow / workflow-list 命令实现工作流的交互式创建与串行执行。",
+  "author": {
+    "name": "MeerkatAI"
+  },
+  "license": "MIT",
+  "keywords": ["workflow", "agent", "orchestration", "consumer-goods", "marketing"]
+}

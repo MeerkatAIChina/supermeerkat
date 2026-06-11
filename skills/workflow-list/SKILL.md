@@ -1,6 +1,7 @@
 ---
 name: workflow-list
 description: 列出所有已创建的工作流，查看名称、描述、步骤数和状态。
+version: 1.0.0
 ---
 
 # workflow-list — 查看工作流列表

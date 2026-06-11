@@ -1,6 +1,7 @@
 ---
 name: run-workflow
 description: 执行一个已创建的工作流，按步骤依次运行并生成最终报告。
+version: 1.0.0
 ---
 
 # run-workflow — 执行工作流
